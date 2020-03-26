@@ -10,6 +10,12 @@ variable "region" {
 variable "keyname" {
   default = "jenkins-ci-cd-tutorial"
 }
+variable "instance_names"{
+  default = {
+    "0" = "Jenkins-Slave-1"
+    "1" = "Jenkins-Slave-2"
+  }
+}
 variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }

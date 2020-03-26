@@ -8,11 +8,11 @@ resource "aws_instance" "jenkins-slaves" {
   key_name               = "${var.keyname}"
   vpc_security_group_ids = ["${aws_security_group.sg_allow_ssh_jenkins.id}"]
   subnet_id              = "${aws_subnet.public-subnet-1.id}"
-  count                  = 2  
+  count                  = "2"  
 
   associate_public_ip_address = true
   tags = {
-      Name = ["${concat("Jenkins-Slave-", count.index)}"]
+      Name = "${lookup(var.instance_names, count.index)}"
   }
 }
 
