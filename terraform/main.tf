@@ -7,7 +7,7 @@ resource "aws_instance" "jenkins-slave-1" {
   instance_type          = "t2.medium"
   key_name               = "${var.keyname}"
   vpc_security_group_ids = ["${aws_security_group.sg_allow_ssh_jenkins.id}"]
-  subnet_id              = ["${aws_subnet.public-subnet-1.id}"]
+  subnet_id              = "${aws_subnet.public-subnet-1.id}"
 
   associate_public_ip_address = true
   tags {
@@ -24,7 +24,7 @@ resource "aws_vpc" "jenkins-ci-cd" {
 }
 resource "aws_subnet" "public-subnet-1" {
   cidr_block        = "${var.public_subnet_1_cidr}"
-  vpc_id            = "[${aws_vpc.jenkins-ci-cd.id}]"
+  vpc_id            = "${aws_vpc.jenkins-ci-cd.id}"
   availability_zone = "${var.region}a"
   tags = {
     Name = "Jenkins-Public-Subnet-1"
@@ -33,7 +33,7 @@ resource "aws_subnet" "public-subnet-1" {
 resource "aws_security_group" "sg_allow_ssh_jenkins" {
   name        = "allow_ssh_jenkins"
   description = "Allow SSH and Jenkins inbound traffic"
-  vpc_id      = "[${aws_vpc.jenkins-ci-cd.id}]"
+  vpc_id      = "${aws_vpc.jenkins-ci-cd.id}"
 
   ingress {
     from_port   = 22
