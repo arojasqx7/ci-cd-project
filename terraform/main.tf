@@ -10,7 +10,7 @@ resource "aws_instance" "jenkins-slave-1" {
   subnet_id              = "${aws_subnet.public-subnet-1.id}"
 
   associate_public_ip_address = true
-  tags {
+  tags = {
       Name = "Jenkins-Slave-1"
   }
 }
