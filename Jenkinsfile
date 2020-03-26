@@ -10,9 +10,7 @@ pipeline {
       stage('Terraform-Init') {
          steps {
              dir('terraform') {
-                 sh(""" terraform init -input=false
-                        echo \$PWD
-                 """)
+                 sh 'terraform init'
              }
          }
       }
