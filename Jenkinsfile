@@ -9,8 +9,17 @@ pipeline {
    stages {
       stage('Terraform-Init') {
          steps {
-             dir('terraform'){
-                 echo 'Hello World from terraform folder..'
+             dir('terraform') {
+                 sh(""" terraform init -input=false
+                        echo \$PWD
+                 """)
+             }
+         }
+      }
+      stage('Terraform-Plan') {
+         steps {
+             dir('terraform') {
+                 sh "terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY'"
              }
          }
       }
