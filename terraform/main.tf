@@ -12,7 +12,7 @@ resource "aws_instance" "jenkins-slaves" {
 
   associate_public_ip_address = true
   tags = {
-      Name = "Jenkins-Slave-${count.index + 1}"
+      Name = "Jenkins-Slave-${count.index}"
   }
 }
 
