@@ -3,16 +3,16 @@ provider "aws" {
 }
 
 resource "aws_instance" "jenkins-slaves" {
-  count                  = 2  
   ami                    = "${data.aws_ami.amazon-linux-2.id}"
   instance_type          = "t2.small"
   key_name               = "${var.keyname}"
   vpc_security_group_ids = ["${aws_security_group.sg_allow_ssh_jenkins.id}"]
   subnet_id              = "${aws_subnet.public-subnet-1.id}"
+  count                  = 2  
 
   associate_public_ip_address = true
   tags = {
-      Name = "Jenkins-Slave-${count.index}"
+      Name = "${concat("Jenkins-Slave-", count.index)}"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_security_group" "sg_allow_ssh_jenkins" {
   }
 }
 
-output "jenkins_slaves_ip_address" {
-  value = "${aws_instance.jenkins-slaves.private_ip}"
+output "jenkins_slaves_public_dns" {
+  value = "${aws_instance.jenkins-slaves.public_dns}"
 }
 
