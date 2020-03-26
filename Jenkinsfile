@@ -9,8 +9,9 @@ pipeline {
    stages {
       stage('Terraform-Init') {
          steps {
-             dir('terraform')
+             dir('terraform'){
                  echo 'Hello World from terraform folder..'
+             }
          }
       }
    }
