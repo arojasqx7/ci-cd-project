@@ -12,7 +12,7 @@ resource "aws_instance" "jenkins-slaves" {
 
   associate_public_ip_address = true
   tags = {
-      Name = "${concat("Jenkins-Slave-", count.index)}"
+      Name = ["${concat("Jenkins-Slave-", count.index)}"]
   }
 }
 
@@ -51,7 +51,8 @@ resource "aws_security_group" "sg_allow_ssh_jenkins" {
   }
 }
 
+/*
 output "jenkins_slaves_public_dns" {
   value = "${aws_instance.jenkins-slaves.public_dns}"
 }
-
+*/
