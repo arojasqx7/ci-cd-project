@@ -21,18 +21,14 @@ pipeline {
       stage('Terraform-Plan') {
          steps {
              dir('terraform') {
-                 sh(""" terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' 
-                        -out terraform.tfplan
-                 """)
-                 stash name: "terraform-plan", includes: "terraform.tfplan"
+                 sh "terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY'"
              }
          }
       }
       stage('Terraform-Apply') {
          steps {
              dir('terraform') {
-                 unstash "terraform-plan"
-                 sh "terraform apply terraform.tfplan -input=false -auto-approve"
+                 sh "terraform apply -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -input=false -auto-approve"
              }
          }
       }
