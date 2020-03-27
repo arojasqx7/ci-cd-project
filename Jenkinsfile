@@ -35,7 +35,7 @@ pipeline {
       stage('Ansible-Provision') {
           steps {
               dir('ansible') {
-                  sh "ansible -m ping jenkins-slaves -i hosts --private-key=$SLAVES_KEYPAIR -u ec2-user"
+                  sh "/usr/local/bin/ansible -m ping jenkins-slaves -i hosts --private-key=$SLAVES_KEYPAIR -u ec2-user"
               }
           }
       }
