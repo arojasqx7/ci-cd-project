@@ -56,6 +56,11 @@ resource "aws_route_table" "jenkins-route-table" {
   }
 }
 
+resource "aws_route_table_association" "jenkins-subnet-rt-associate" {
+  subnet_id      = "${aws_subnet.public-subnet-1.id}"
+  route_table_id = "${aws_route_table.jenkins-route-table.id}"
+}
+
 resource "aws_security_group" "sg_allow_ssh_jenkins" {
   name        = "allow_ssh_jenkins"
   description = "Allow SSH and Jenkins inbound traffic"

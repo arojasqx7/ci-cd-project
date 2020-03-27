@@ -12,7 +12,7 @@ variable "keyname" {
 }
 variable "instance_names"{
   default = {
-    "0" = "Jenkins-Slave-1"
-    "1" = "Jenkins-Slave-2"
+    "0" = "Jenkins-linux-slave-1"
+    "1" = "Jenkins-linux-slave-2"
   }
 }
