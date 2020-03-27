@@ -1,6 +1,7 @@
 ---
 - hosts: jenkins-slaves
   gather_facts: false
+  become: yes
   tasks:
    - name: Install git
      yum: 
