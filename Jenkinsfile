@@ -6,9 +6,9 @@ pipeline {
     }
 
    environment {
-       ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID') 
-       SECRET_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-       TF_HOME = tool('terraform-0.12.6')
+       ACCESS_KEY        = credentials('AWS_ACCESS_KEY_ID') 
+       SECRET_KEY        = credentials('AWS_SECRET_ACCESS_KEY')
+       SLAVES_KEYPAIR    = credentials('JENKINS_SLAVES_AWS_KEYPAIR')
    }  
    stages {
       stage('Terraform-Init') {
@@ -31,6 +31,13 @@ pipeline {
                  sh "terraform apply -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -input=false -auto-approve"
              }
          }
+      }
+      stage('Ansible-Provision') {
+          steps {
+              dir('ansible') {
+                  sh "ansible -m ping jenkins-slaves -i hosts --private-key=$SLAVES_KEYPAIR -u ec2-user"
+              }
+          }
       }
    }
 }

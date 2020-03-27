@@ -1,0 +1,8 @@
+---
+- hosts: jenkins-slaves
+  gather_facts: false
+  tasks:
+   - name: Install git
+     yum: 
+       name: git
+       state: present
