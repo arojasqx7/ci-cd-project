@@ -38,3 +38,15 @@
        name: jenkins
        state: started
        enabled: true
+   
+   - name: Sleep for 30 secs
+     wait_for: timeout=30
+
+   - name: Get init password Jenkins
+     shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+     changed_when: false
+     register: result
+   
+   - name: Print init password Jenkins
+     debug:
+      var: result.stdout
