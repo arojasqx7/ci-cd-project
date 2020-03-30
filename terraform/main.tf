@@ -17,20 +17,50 @@ resource "aws_instance" "jenkins-slaves" {
 }
 
 resource "aws_vpc" "jenkins-ci-cd" {
-    cidr_block           = "${var.vpc_cidr}"
+    cidr_block           = "10.0.0.0/16"
     enable_dns_hostnames = true
+
     tags = {
-        Name = "Jenkins-Vpc"
+        Name = "Jenkins-VPC"
     }
 }
+
 resource "aws_subnet" "public-subnet-1" {
-  cidr_block        = "${var.public_subnet_1_cidr}"
+  cidr_block        = "10.0.1.0/24"
   vpc_id            = "${aws_vpc.jenkins-ci-cd.id}"
   availability_zone = "${var.region}a"
+
   tags = {
     Name = "Jenkins-Public-Subnet-1"
   }
 }
+
+resource "aws_internet_gateway" "jenkins-vpc-ig" {
+  vpc_id = "${aws_vpc.jenkins-ci-cd.id}"
+
+  tags = {
+      Name = "Jenkins-vpc-internet-gateway"
+  }
+}
+
+resource "aws_route_table" "jenkins-route-table" {
+  vpc_id = "${aws_vpc.jenkins-ci-cd.id}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.jenkins-vpc-ig.id}"
+  }
+
+  tags = {
+    Name = "Jenkins-Route-Table"
+  }
+}
+
+resource "aws_route_table_association" "jenkins-subnet-rt-associate" {
+  subnet_id      = "${aws_subnet.public-subnet-1.id}"
+  route_table_id = "${aws_route_table.jenkins-route-table.id}"
+}
+
 resource "aws_security_group" "sg_allow_ssh_jenkins" {
   name        = "allow_ssh_jenkins"
   description = "Allow SSH and Jenkins inbound traffic"
@@ -49,10 +79,11 @@ resource "aws_security_group" "sg_allow_ssh_jenkins" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
 
-/*
-output "jenkins_slaves_public_dns" {
-  value = "${aws_instance.jenkins-slaves.public_dns}"
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }   
 }
-*/
