@@ -11,6 +11,14 @@ pipeline {
        SLAVES_KEYPAIR    = credentials('JENKINS_SLAVES_AWS_KEYPAIR')
    }  
    stages {
+      stage('Build Node app') {
+        agent { 
+            dockerfile true 
+        }
+        steps {
+            sh 'npm install'
+        }
+      } 
       stage('Terraform-Init') {
          steps {
              dir('terraform') {
