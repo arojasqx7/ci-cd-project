@@ -9,10 +9,5 @@ RUN npm install
 
 COPY /src ./
 
-# Run app and tests
-RUN node app --location Newcastle && \
-    npm test && \
-    npm run cover
-
 EXPOSE 3000
 CMD ["npm", "start"]
